@@ -8,9 +8,15 @@ import morgan from 'morgan'
 import path from 'path'
 import multer from 'multer'
 import authRoutes from './routes/auth.js'
+import userRoutes from './routes/users.js'
+import postRoutes from './routes/posts.js'
 import { fileURLToPath } from 'url'
 import { register } from './controllers/auth.js'
 import { verifyToken } from './middleware/auth.js'
+import User from "./models/User.js";
+import Post from "./models/Post.js";
+import { users, posts } from "./data/index.js";
+
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -46,7 +52,11 @@ const storage = multer.diskStorage({
 const upload = multer({storage})
 
 app.post('/auth/register', upload.single('picture'),register)
+
+
 app.use('auth', authRoutes)
+app.use("/users", userRoutes);
+app.use("/posts", postRoutes);
 
 const port = process.env.PORT || 8081
 const url = process.env.URL
@@ -56,4 +66,7 @@ mongoose.connect(url,{
     useUnifiedTopology: true
 }).then(()=>{
     app.listen(port, () => console.log(`http://localhost:${port}`))
+
+    //  User.insertMany(users);
+    //  Post.insertMany(posts);
 }).catch((err)=> console.log(err))
