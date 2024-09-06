@@ -67,6 +67,6 @@ mongoose.connect(url,{
 }).then(()=>{
     app.listen(port, () => console.log(`http://localhost:${port}`))
 
-    //  User.insertMany(users);
-    //  Post.insertMany(posts);
+    //User.insertMany(users);
+    //Post.insertMany(posts);
 }).catch((err)=> console.log(err))
