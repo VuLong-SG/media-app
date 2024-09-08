@@ -2,11 +2,15 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setPosts } from "state";
 import PostWidget from "./PostWidget";
+import { Typography, useTheme } from "@mui/material";
+
 
 const PostsWidget = ({ userId, isProfile = false }) => {
   const dispatch = useDispatch();
+  const { palette } = useTheme();
   const posts = useSelector((state) => state.posts);
   const token = useSelector((state) => state.token);
+  const medium = palette.neutral.medium;
 
   const getPosts = async () => {
     const response = await fetch("http://localhost:8080/posts", {
@@ -28,7 +32,11 @@ const PostsWidget = ({ userId, isProfile = false }) => {
     const data = await response.json();
     dispatch(setPosts({ posts: data }));
   };
-
+  
+  const sortedPosts = [...posts].sort(
+    (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+  );
+  
   useEffect(() => {
     if (isProfile) {
       getUserPosts();
@@ -39,7 +47,12 @@ const PostsWidget = ({ userId, isProfile = false }) => {
 
   return (
     <>
-      {posts.map(
+     {sortedPosts.length === 0 ? ( 
+       <Typography color={medium} fontSize="1.5rem">
+      No posts yet
+     </Typography>
+      ) : (
+      sortedPosts.map(
         ({
           _id,
           userId,
@@ -51,6 +64,7 @@ const PostsWidget = ({ userId, isProfile = false }) => {
           userPicturePath,
           likes,
           comments,
+          createdAt, 
         }) => (
           <PostWidget
             key={_id}
@@ -63,8 +77,9 @@ const PostsWidget = ({ userId, isProfile = false }) => {
             userPicturePath={userPicturePath}
             likes={likes}
             comments={comments}
+            date={new Date(createdAt).toLocaleString()} // format the date as needed
           />
-        )
+        ))
       )}
     </>
   );

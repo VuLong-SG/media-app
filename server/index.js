@@ -49,14 +49,14 @@ app.use("/auth", authRoutes);
 app.use("/users", userRoutes);
 app.use("/posts", postRoutes);
 
-const PORT = process.env.PORT || 6001;
+const PORT = process.env.PORT || 8081;
 mongoose
   .connect(process.env.MONGO_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
   .then(() => {
-    app.listen(PORT, () => console.log(`Server Port: ${PORT}`));
+    app.listen(PORT, () => console.log(`Server Port: http://localhost:${PORT}`));
 
     // User.insertMany(users);
     // Post.insertMany(posts);
