@@ -48,7 +48,7 @@ const PostsWidget = ({ userId, isProfile = false }) => {
   return (
     <>
      {sortedPosts.length === 0 ? ( 
-       <Typography color={medium} fontSize="1.5rem">
+       <Typography color={medium} fontSize="2rem">
       No posts yet
      </Typography>
       ) : (
